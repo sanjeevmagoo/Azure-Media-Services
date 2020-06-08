@@ -21,7 +21,7 @@ namespace VideoTextApp.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
-        
+        public Boolean disbool = false;
 
         public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostingEnvironment)
         {
@@ -43,6 +43,8 @@ namespace VideoTextApp.Controllers
         [HttpGet]
         public ActionResult GetVideo()
         {
+            disbool = false;
+            ViewData["disbool"] = disbool;
             return View();
         }
 
@@ -51,34 +53,32 @@ namespace VideoTextApp.Controllers
         [RequestSizeLimit(209715200)]
         public async Task<IActionResult> GetVideo(IFormFile uploadFile)
         {
-            if(ModelState.IsValid)
+            disbool = true;
+            if (uploadFile != null)
             {
-                if (uploadFile != null)
-                {
-                    string extension = Path.GetExtension(uploadFile.FileName);
-                    string newfileName = "InputVideo" + extension;
+                string extension = Path.GetExtension(uploadFile.FileName);
+                string newfileName = "InputVideo" + extension;
 
-                    string uploadsFolder = @"";
-                    string filePath = Path.Combine(uploadsFolder, newfileName);
+                string uploadsFolder = @"";
+                string filePath = Path.Combine(uploadsFolder, newfileName);
 
-                    FileStream fs = new FileStream(filePath, FileMode.Create);
-                    uploadFile.CopyTo(fs);
-                    fs.Close();
+                FileStream fs = new FileStream(filePath, FileMode.Create);
+                uploadFile.CopyTo(fs);
+                fs.Close();
 
-                    AnalyzeVideos.Program ap = new AnalyzeVideos.Program() ;
+                AnalyzeVideos.Program ap = new AnalyzeVideos.Program() ;
                     
 
-                    ViewData["message"] = $"{uploadFile.Length} bytes uploaded successfully!";
+                ViewData["message"] = $"{uploadFile.Length} bytes uploaded successfully!";
 
-                    await AnalyzeVideos.Program.Main();
+                await AnalyzeVideos.Program.Main();
                     
-                    string textToDisplay = "";
-                    textToDisplay = AnalyzeVideos.Program.FetchData();
-                    ViewData["DisplayText"] = textToDisplay;
+                string textToDisplay = "";
+                textToDisplay = AnalyzeVideos.Program.FetchData();
+                ViewData["DisplayText"] = textToDisplay;
 
-                    return View("GetVideo");
-                }
-
+                ViewData["disbool"] = disbool;
+                return View("GetVideo");
             }
 
             return View("GetVideo");

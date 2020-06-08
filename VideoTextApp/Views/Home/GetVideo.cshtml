@@ -1,31 +1,33 @@
-﻿    
+﻿
 @{
     ViewData["Title"] = "GetVideo";
 }
 
 <h3>upload video to Get Text</h3>
 <br />
+
+@if (Convert.ToBoolean(@ViewData["disbool"]))
+{
+    <div class="col-sm-10">
+        <iframe width="500" height="300" src="https://csg1003200049146824.blob.core.windows.net/direct2sanjeev/US-National-Emergency-Announcement.mp4" frameborder="0" allow="accelerometer; @*autoplay;*@ encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+}
+
 <br />
 
-<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="GetVideo" >
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="GetVideo">
     <div class="form-group row">
-        @*<label asp-for="uploadFile" class="col-sm-2 col-form-label"></label>*@
         <div class="col-sm-10">
-            @*<div class="custom-file">
-            <input asp-for="uploadFile" class="form-control custom-file-input">
-            <label class="custom-file-label">Choose File...</label>
-
-        </div>*@
             <input type="file" name="uploadFile" />
-            <br/>
+            <br />
             @*<h4>Or Upload video Url Below</h4>
-            <input type="url" name="uploadUrl" />*@
+                <input type="url" name="uploadUrl" />*@
         </div>
     </div>
-    
+
     <div class="form-group row">
         <div class="col-sm-10">
-            <input type="submit" value="Upload"/>
+            <input type="submit" value="Upload" />
         </div>
     </div>
 
